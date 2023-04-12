@@ -1,4 +1,5 @@
 from turtle import Turtle
+
 ALIGHMENT = "center"
 FONT = ("Arial", 10, "bold")
 
@@ -7,24 +8,27 @@ class Score(Turtle):
     def __init__(self):
         super().__init__()
         self.count = 0
+        with open("data.txt") as data:
+            self.high_score = int(data.read())
         self.hideturtle()
         self.color("white")
         self.penup()
         self.goto(0, 285)
+        self.update()
 
     def update(self):
+        self.clear()
+        self.write(f"Score: {self.count} High score: {self.high_score}", align=ALIGHMENT, font=FONT)
+
+    def reset(self):
+        if self.count > self.high_score:
+            with open("data.txt", "w") as data:
+                data.write(f"{self.count}")
+            self.high_score = self.count
+        self.count = 0
+        self.update()
+
+    def increase_score(self):
         self.count += 1
         self.clear()
-        self.write(arg=f"Score: {self.count}", align=ALIGHMENT, font=FONT)
-
-    def game_over(self):
-        self.clear()
-        self.color("red")
-        self.goto(0, 0)
-        self.write(arg="GAME OVER", align=ALIGHMENT, font=("Arial", 15, "bold"))
-        self.goto(0, -20)
-        self.write(arg=f"Score: {self.count}", align=ALIGHMENT, font=FONT)
-
-
-
-
+        self.update()
